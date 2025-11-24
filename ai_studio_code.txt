@@ -1,0 +1,43 @@
+SMARTMINT-SPORTS/
+├── .env                      (Create this file for API Keys)
+├── index.html                (The main HTML file)
+├── package.json              (Dependencies)
+├── server.js                 (Proxy server for local testing)
+├── tsconfig.json             (TypeScript config)
+├── tsconfig.node.json        (TypeScript node config)
+├── vercel.json               (Deployment config)
+├── vite.config.ts            (Vite config)
+├── metadata.json             (App metadata)
+├── public/
+│   └── robots.txt            (SEO file)
+└── src/
+    ├── index.tsx             (Entry point)
+    ├── App.tsx               (Main App logic)
+    ├── types.ts              (TypeScript definitions)
+    ├── constants.ts          (Config and links)
+    ├── services/
+    │   └── api.ts            (API logic)
+    └── components/
+        ├── AdminModal.tsx
+        ├── AIInsights.tsx
+        ├── AuthModal.tsx
+        ├── BettingModal.tsx
+        ├── Button.tsx
+        ├── FanZone.tsx
+        ├── Footer.tsx
+        ├── GamesModal.tsx
+        ├── Header.tsx
+        ├── Hero.tsx
+        ├── Highlights.tsx
+        ├── Jackpot.tsx
+        ├── LiveMatches.tsx
+        ├── LiveTVModal.tsx
+        ├── Minty.tsx
+        ├── MyBetsModal.tsx
+        ├── NewsTicker.tsx
+        ├── ProfileModal.tsx
+        ├── Shop.tsx
+        ├── Sidebar.tsx
+        ├── Standings.tsx
+        ├── Toast.tsx
+        └── WalletModal.tsx

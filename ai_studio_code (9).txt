@@ -1,0 +1,65 @@
+// src/constants.ts
+import { Partner } from './types';
+
+const getEnv = (key: string, fallback: string): string => {
+    try {
+        // @ts-ignore
+        if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) return import.meta.env[key];
+    } catch (e) {}
+    return fallback;
+};
+
+export const API_KEYS = {
+    FOOTBALL: getEnv('VITE_FOOTBALL_API_KEY', '315e6e656a83033282a9fa2468a51cd9'),
+    YOUTUBE: getEnv('VITE_YOUTUBE_API_KEY', 'AIzaSyBT0XWduMbPTLNmL7uJtIhZUolTcgZJxok')
+};
+
+export const LEAGUES = [
+    { id: 39, name: 'Premier League', logo: 'https://media.api-sports.io/football/leagues/39.png' },
+    { id: 140, name: 'La Liga', logo: 'https://media.api-sports.io/football/leagues/140.png' },
+    { id: 135, name: 'Serie A', logo: 'https://media.api-sports.io/football/leagues/135.png' },
+    { id: 78, name: 'Bundesliga', logo: 'https://media.api-sports.io/football/leagues/78.png' },
+    { id: 61, name: 'Ligue 1', logo: 'https://media.api-sports.io/football/leagues/61.png' }
+];
+
+export const POPULAR_LEAGUES = [
+    { id: 0, name: 'All Leagues', short: 'All' },
+    { id: 39, name: 'Premier League', short: 'EPL' },
+    { id: 140, name: 'La Liga', short: 'La Liga' },
+    { id: 135, name: 'Serie A', short: 'Serie A' },
+    { id: 2, name: 'Champions League', short: 'UCL' }
+];
+
+export const TOP_PICKS = [
+    { title: 'SmartMint E-Commerce', info: 'Visit Official Online Store' },
+    { title: 'Authentic Jerseys', info: '2024/25 Season Kits' },
+    { title: 'Pro Match Balls', info: 'FIFA Quality Approved' }
+];
+
+export const BANNERS = {
+    TOP: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=1200&h=200&fit=crop',
+    SIDEBAR: 'https://images.unsplash.com/photo-1522778119026-d647f0565c6a?q=80&w=400&h=500&fit=crop',
+    AFFILIATE: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=600&h=300&fit=crop',
+    FOOTER: 'https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?q=80&w=1200&h=200&fit=crop'
+};
+
+export const BREAKING_NEWS = [
+    "SmartMint Sports is now LIVE! Register to get 50 Free Fan Points.",
+    "Man City vs Arsenal: The title decider this weekend.",
+    "Mbappe confirms move to Real Madrid in summer transfer.",
+    "Shop Alert: New 2025 Jerseys available in the Store."
+];
+
+export const DEFAULT_PARTNERS: Partner[] = [
+    { id: '1', name: 'SportPesa', url: 'https://www.ke.sportpesa.com', category: 'BETTING', active: true },
+    { id: '2', name: 'Betika', url: 'https://www.betika.com', category: 'BETTING', active: true },
+    { id: '3', name: 'MozzartBet', url: 'https://www.mozzartbet.co.ke', category: 'BETTING', active: true },
+    { id: '4', name: 'Odibets', url: 'https://odibets.com', category: 'BETTING', active: true },
+    { id: '5', name: '1xBet', url: 'https://1xbet.co.ke', category: 'BETTING', active: true },
+    { id: '7', name: 'Jumia', url: 'https://www.jumia.co.ke', category: 'SHOPPING', active: true },
+    { id: '8', name: 'Kilimall', url: 'https://www.kilimall.co.ke', category: 'SHOPPING', active: true },
+    { id: '9', name: 'Jiji', url: 'https://jiji.co.ke', category: 'SHOPPING', active: true },
+    { id: '10', name: 'AliExpress', url: 'https://s.click.aliexpress.com/e/_c3MPHuJb', category: 'SHOPPING', active: true }
+];
+
+export const AFFILIATE_LINKS = { BET365: "#", SKYBET: "#", STAKE: "#", SPORTPESA: "#", BETIKA: "#", BETPAWA: "#", MOZZARTBET: "#", ODIBETS: "#", ONEXBET: "#", ALIEXPRESS: "#" };

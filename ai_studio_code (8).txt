@@ -1,0 +1,42 @@
+// src/types.ts
+export interface Team { id: number; name: string; logo: string; }
+export interface Goal { home: number | null; away: number | null; }
+export interface FixtureStatus { long: string; short: string; elapsed: number | null; }
+export interface League { id: number; name: string; country: string; logo: string; flag: string; season: number; round: string; }
+export interface Match {
+    fixture: { id: number; timezone: string; date: string; timestamp: number; periods: { first: number | null; second: number | null; }; venue: { id: number | null; name: string; city: string; }; status: FixtureStatus; };
+    league: League;
+    teams: { home: Team & { winner: boolean | null }; away: Team & { winner: boolean | null }; };
+    goals: Goal;
+    score: { halftime: Goal; fulltime: Goal; extratime: Goal; penalty: Goal; };
+}
+export interface Standing {
+    rank: number; team: Team; points: number; goalsDiff: number; group: string; form: string; status: string; description: string | null;
+    all: { played: number; win: number; draw: number; lose: number; goals: { for: number; against: number; }; };
+}
+export interface AllTimeTeamStat { rank: number; team: Team; seasons: number; matches: number; wins: number; draws: number; losses: number; goalsFor: number; goalsAgainst: number; points: number; titles: number; }
+export interface TopScorer {
+    rank: number; player: { id: number; name: string; photo: string; }; team: Team; statistics: { goals: number; assists: number | null; appearances: number; rating: string; }[];
+}
+export interface Commentary { time: string; text: string; type: 'goal' | 'card' | 'sub' | 'normal'; team?: 'home' | 'away'; }
+export interface YouTubeResult { id: { videoId: string; }; snippet: { title: string; description: string; thumbnails: { medium: { url: string; }; }; channelTitle: string; }; }
+export interface BetValue { value: string; odd: string; }
+export interface Transaction {
+    id: string; type: 'DEPOSIT' | 'WITHDRAWAL' | 'BET_STAKE' | 'BET_WIN' | 'SUBSCRIPTION' | 'SHOP_PURCHASE';
+    amount: number; date: string; status: 'PENDING' | 'COMPLETED' | 'FAILED'; description: string;
+}
+export interface BetTicket {
+    id: string; matchId: number; matchName: string; selection: string; odd: number; stake: number; potentialReturn: number; date: string; status: 'PENDING' | 'WON' | 'LOST';
+}
+export interface User {
+    username: string; fullName?: string; password?: string; phone?: string; joinedAt: string; coins: number;
+    rank: 'Rookie' | 'Pro' | 'Expert' | 'Legend'; avatar?: string; transactions?: Transaction[]; bets?: BetTicket[]; plan?: 'Free' | 'VIP'; subscriptionEnd?: string;
+}
+export interface Partner { id: string; name: string; url: string; category: 'BETTING' | 'SHOPPING' | 'OTHER'; active: boolean; }
+export interface Product {
+    id: number; name: string; price: number; oldPrice?: number; category: string; image: string; badge?: string;
+    type: 'INTERNAL' | 'EXTERNAL'; vendor: string; externalLink?: string; description?: string; rating?: number;
+}
+export interface CartItem extends Product { quantity: number; }
+export interface AdminNotification { id: string; type: 'ORDER' | 'DEPOSIT' | 'WITHDRAWAL' | 'ALERT'; message: string; date: string; read: boolean; amount?: number; }
+export interface Toast { id: string; message: string; type: 'success' | 'error' | 'info'; }

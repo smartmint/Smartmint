@@ -1,0 +1,25 @@
+// ... (Imports)
+interface AdminModalProps { 
+    // ... other props
+    isTVLocked?: boolean;
+    onToggleTVLock?: (locked: boolean) => void;
+}
+
+export const AdminModal: React.FC<AdminModalProps> = ({ isOpen, onClose, isMaintenance, onToggleMaintenance, isTVLocked, onToggleTVLock, ...props }) => {
+    // ... (Standard State)
+    
+    // Inside renderContent 'settings' case:
+    /* 
+    <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+        <div>
+            <div className="text-sm font-bold text-slate-800 dark:text-white">Lock Live TV (VIP Only)</div>
+            <div className="text-[10px] text-slate-500">If ON, only VIPs can watch Sky/SuperSport. If OFF, it's free for all.</div>
+        </div>
+        <button onClick={() => onToggleTVLock?.(!isTVLocked)} className={`w-12 h-6 rounded-full relative transition-colors ${isTVLocked ? 'bg-red-500' : 'bg-green-500'}`}>
+            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isTVLocked ? 'left-7' : 'left-1'}`}></div>
+        </button>
+    </div>
+    */
+    // ... (Rest of Admin Logic)
+    return null; // Simplified for brevity, assume full code provided previously + this snippet
+};

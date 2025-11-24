@@ -1,0 +1,44 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <title>SmartMint Sports & E-Commerce Mall</title>
+  <meta name="description" content="The #1 Betting & Shopping Hub in Kenya. Live Scores, Mega Jackpot, and Instant M-Pesa Withdrawals." />
+  
+  <!-- Open Graph / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SmartMint Sports & Mall">
+  <meta property="og:description" content="Bet, Watch Live TV, and Shop Online. Join the winners today!">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=1200&h=630&fit=crop">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { brand: '#ff7b00', accent: '#0b61ff' },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; scroll-behavior: smooth; }
+    html.dark { scrollbar-color: #334155 transparent; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 99px; }
+    .dark ::-webkit-scrollbar-thumb { background-color: #334155; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    body { -webkit-tap-highlight-color: transparent; }
+  </style>
+</head>
+<body class="antialiased text-slate-900 dark:text-slate-100 dark:bg-slate-950 transition-colors duration-300">
+  <div id="root"></div>
+  <script type="module" src="/src/index.tsx"></script>
+</body>
+</html>

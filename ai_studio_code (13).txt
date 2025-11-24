@@ -1,0 +1,75 @@
+import React, { useState, useEffect } from 'react';
+import { X, Tv, Play, Lock, MonitorPlay, Volume2, Maximize, ListVideo, Crown } from 'lucide-react';
+import { searchYouTube } from '../services/api';
+import { YouTubeResult, User } from '../types';
+import { Button } from './Button';
+
+interface LiveTVModalProps { isOpen: boolean; onClose: () => void; user: User | null; onUpgrade: () => void; isTVVIPOnly: boolean; }
+
+const CHANNELS = [
+    { id: 'smartmint', name: 'SmartMint Sports TV', query: 'Football Highlights HD 2025', color: 'bg-[#ff7b00]', free: true },
+    { id: 'sky', name: 'Sky Sports PL', query: 'Sky Sports Premier League Highlights', color: 'bg-blue-600', free: false },
+    { id: 'supersport', name: 'SuperSport', query: 'SuperSport Football Highlights', color: 'bg-blue-800', free: false },
+    { id: 'espn', name: 'ESPN FC', query: 'ESPN FC Football analysis', color: 'bg-red-600', free: false },
+];
+
+export const LiveTVModal: React.FC<LiveTVModalProps> = ({ isOpen, onClose, user, onUpgrade, isTVVIPOnly }) => {
+    const [activeChannel, setActiveChannel] = useState(CHANNELS[0]);
+    const [playlist, setPlaylist] = useState<YouTubeResult[]>([]);
+    const [currentVideo, setCurrentVideo] = useState<YouTubeResult | null>(null);
+    const [loading, setLoading] = useState(false);
+    const isVIP = user?.plan === 'VIP';
+
+    // Logic: Channel is locked ONLY if (Not a Free Channel AND TV Lock is Active AND User is NOT VIP)
+    // If isTVVIPOnly is false, ALL channels are unlocked.
+    const isChannelLocked = !activeChannel.free && isTVVIPOnly && !isVIP;
+
+    useEffect(() => { if (isOpen) loadChannel(activeChannel); }, [isOpen, activeChannel, isTVVIPOnly]);
+
+    const loadChannel = async (channel: typeof CHANNELS[0]) => {
+        if (!channel.free && isTVVIPOnly && !isVIP) { setCurrentVideo(null); return; }
+        setLoading(true);
+        try {
+            const results = await searchYouTube(channel.query + ' live match day');
+            setPlaylist(results);
+            if (results.length > 0) setCurrentVideo(results[0]);
+        } catch (e) {} finally { setLoading(false); }
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-md animate-in fade-in">
+            <div className="w-full h-full md:h-[90vh] md:max-w-6xl bg-slate-900 md:rounded-2xl overflow-hidden flex flex-col md:flex-row shadow-2xl border border-slate-800 relative">
+                <button onClick={onClose} className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full md:hidden"><X className="w-6 h-6" /></button>
+                <div className="flex-grow flex flex-col relative bg-black group">
+                    <div className="relative w-full h-full flex items-center justify-center bg-black">
+                        {isChannelLocked ? (
+                            <div className="flex flex-col items-center justify-center text-center p-6">
+                                <Lock className="w-16 h-16 text-yellow-500 mb-4" />
+                                <h3 className="text-2xl font-black text-white mb-2">Premium Channel Locked</h3>
+                                <p className="text-slate-400 mb-6">Admin has restricted this channel to VIPs only.</p>
+                                <Button onClick={onUpgrade} className="bg-yellow-500 text-black font-black"><Crown className="w-5 h-5 mr-2"/> Unlock VIP</Button>
+                            </div>
+                        ) : loading ? (
+                            <div className="flex flex-col items-center text-slate-500"><div className="w-10 h-10 border-4 border-slate-700 border-t-white rounded-full animate-spin mb-2"></div><span>Connecting...</span></div>
+                        ) : currentVideo ? (
+                            <iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${currentVideo.id.videoId}?autoplay=1&modestbranding=1&rel=0`} title="TV" frameBorder="0" allowFullScreen className="w-full h-full object-cover"></iframe>
+                        ) : <div className="text-slate-500">NO SIGNAL</div>}
+                    </div>
+                </div>
+                <div className="w-full md:w-80 bg-slate-950 border-l border-slate-800 flex flex-col">
+                    <div className="p-4 border-b border-slate-800 flex justify-between"><h4 className="text-white font-bold flex items-center gap-2"><ListVideo className="w-4 h-4 text-[#ff7b00]"/> Channels</h4><button onClick={onClose} className="hidden md:block text-slate-500 hover:text-white"><X className="w-5 h-5"/></button></div>
+                    <div className="flex-grow overflow-y-auto custom-scrollbar">
+                        {CHANNELS.map(channel => (
+                            <button key={channel.id} onClick={() => { setActiveChannel(channel); loadChannel(channel); }} className={`w-full flex items-center gap-3 p-3 border-b border-slate-800 hover:bg-slate-900 ${activeChannel.id === channel.id ? 'bg-slate-800' : ''}`}>
+                                <div className={`w-10 h-10 rounded ${channel.color} flex items-center justify-center text-white font-bold`}>{channel.name[0]}</div>
+                                <div className="text-left"><div className="font-bold text-sm text-white">{channel.name}</div><div className="text-[10px] text-slate-500">{!channel.free && isTVVIPOnly ? 'VIP LOCKED' : 'FREE'}</div></div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};

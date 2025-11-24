@@ -1,0 +1,6 @@
+// public/robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /wallet
+Sitemap: https://smartmint.co.ke/sitemap.xml

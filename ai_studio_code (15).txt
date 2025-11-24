@@ -1,0 +1,82 @@
+import React, { useState, useEffect } from 'react';
+import { Header, Hero, LiveMatches, Standings, Highlights, Sidebar, Minty, AdminModal, AuthModal, WalletModal, BettingModal, GamesModal, LiveTVModal, MyBetsModal, ProfileModal, ToastContainer, Footer, NewsTicker, FanZone, AIInsights, Shop, Jackpot } from './components';
+import { BANNERS, DEFAULT_PARTNERS, BREAKING_NEWS, AFFILIATE_LINKS } from './constants';
+import { User, Match, Transaction, BetTicket, Partner, AdminNotification, Toast } from './types';
+
+const App: React.FC = () => {
+    // ... (All Standard State: User, Wallet, etc.)
+    
+    // TV Lock State (Default False = Free)
+    const [isTVVIPOnly, setIsTVVIPOnly] = useState(() => localStorage.getItem('smartmint_tv_lock') === 'true');
+    useEffect(() => localStorage.setItem('smartmint_tv_lock', isTVVIPOnly.toString()), [isTVVIPOnly]);
+
+    // ... (Handlers for Login, Bet, Wallet etc.)
+
+    return (
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300 font-sans">
+            <ToastContainer toasts={toasts} onRemove={removeToast} />
+            <Header 
+                isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onOpenAdmin={() => setIsAdminOpen(true)} user={user} 
+                onOpenAuth={() => setIsAuthOpen(true)} onLogout={handleLogout} onOpenWallet={() => setIsWalletOpen(true)} 
+                onOpenGames={() => setIsGamesOpen(true)} onOpenTV={() => setIsLiveTVOpen(true)} onNavigate={setCurrentView} 
+                onOpenMyBets={() => setIsMyBetsOpen(true)} onOpenMyProfile={() => setIsProfileOpen(true)}
+            />
+            <main className="max-w-[1100px] mx-auto px-4 py-6">
+                {currentView === 'home' && (
+                    <>
+                        <Hero bannerUrl={banners.TOP} link={affiliateLinks.BET365} />
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
+                            <div className="lg:col-span-8 space-y-6">
+                                <NewsTicker news={adminNews} />
+                                <div id="ai-insights"><AIInsights onOpenMinty={() => setIsMintyOpen(true)} user={user} /></div>
+                                <div id="fan-zone"><FanZone /></div>
+                                <div id="fixtures"><LiveMatches onSearchHighlights={handleSearchHighlights} affiliateLinks={partners} onOpenAdmin={() => setIsAdminOpen(true)} onOddsClick={onOddsClick} /></div>
+                                <div id="standings"><Standings user={user} /></div>
+                                <div id="highlights"><Highlights initialQuery={highlightsQuery} /></div>
+                            </div>
+                            <div className="lg:col-span-4"><div className="sticky top-20 space-y-6 self-start pb-6"><Sidebar onOpenAdmin={() => setIsAdminOpen(true)} topBannerUrl={banners.SIDEBAR} affiliateBannerUrl={banners.AFFILIATE} partners={partners} adminPhone={adminPhone} /></div></div>
+                        </div>
+                    </>
+                )}
+                {currentView === 'shop' && <Shop partners={partners} user={user} onShopPurchase={handleShopPurchase} onGuestOrder={handleGuestOrder} onOpenAuth={() => setIsAuthOpen(true)} adminPhone={adminPhone} />}
+                {currentView === 'jackpot' && <Jackpot user={user} onOpenAuth={() => setIsAuthOpen(true)} onPlaceJackpotBet={handlePlaceJackpotBet} />}
+            </main>
+            <Footer bannerUrl={banners.FOOTER} link={affiliateLinks.BET365} />
+            <Minty isOpen={isMintyOpen} setIsOpen={setIsMintyOpen} adminPhone={adminPhone} />
+            <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onLogin={handleLogin} />
+            
+            {/* ADMIN MODAL WITH TV LOCK PROP */}
+            <AdminModal 
+                isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} 
+                currentBanners={banners} onUpdateBanners={setBanners}
+                partners={partners} onUpdatePartners={setPartners}
+                currentNews={adminNews} onUpdateNews={setAdminNews}
+                currentGAId={googleAnalyticsId} onUpdateGAId={setGoogleAnalyticsId}
+                currentAdminPhone={adminPhone} onUpdateAdminPhone={setAdminPhone}
+                notifications={adminNotifications} onUpdateNotifications={setAdminNotifications}
+                isMaintenance={isMaintenance} onToggleMaintenance={setIsMaintenance}
+                companySettings={companySettings} onUpdateCompanySettings={setCompanySettings}
+                // NEW PROPS
+                isTVLocked={isTVVIPOnly} onToggleTVLock={setIsTVVIPOnly}
+            />
+            
+            {/* TV MODAL WITH LOCK PROP */}
+            <LiveTVModal 
+                isOpen={isLiveTVOpen} onClose={() => setIsLiveTVOpen(false)} user={user} 
+                onUpgrade={() => { setIsLiveTVOpen(false); setIsWalletOpen(true); }}
+                isTVVIPOnly={isTVVIPOnly}
+            />
+            
+            {user && (
+                <>
+                    <WalletModal isOpen={isWalletOpen} onClose={() => setIsWalletOpen(false)} user={user} onDepositRequest={handleDepositRequest} onWithdrawRequest={handleWithdrawRequest} onUpgrade={handleUpgrade} companyPaybill={companySettings.paybill} companyName={companySettings.name} />
+                    <BettingModal isOpen={bettingModalOpen} onClose={() => setBettingModalOpen(false)} match={selectedBetMatch} selection={selectedSelection} userBalance={user.coins} onPlaceBet={handlePlaceBet} />
+                    <GamesModal isOpen={isGamesOpen} onClose={() => setIsGamesOpen(false)} user={user} onUpdateUser={updateUserData} />
+                    <MyBetsModal isOpen={isMyBetsOpen} onClose={() => setIsMyBetsOpen(false)} user={user} />
+                    <ProfileModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} user={user} onLogout={handleLogout} />
+                </>
+            )}
+        </div>
+    );
+};
+export default App;
